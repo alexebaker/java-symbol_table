@@ -1,0 +1,16 @@
+IMPLEMENTATION NOTES FOR SPIKE3
+
+Indenting tree structures according to depth can be done in many
+ways.  Some possibilities include:
+
+ - Passing an 'unsigned depth' argument around during a recursive tree
+   walk.  Most node printing routines just pass it on as is, but the
+   STATEMENTS rule (or something thereabouts) will pass an incremented
+   value to its children.
+
+ - Additional information could be maintained in CompilerState to
+   track the current block depth, and it would be manipulated there,
+   rather than via an extra argument.
+
+ - Additional information could be maintained in whatever output
+   stream abstraction the compiler is using, and be manipulated there.
