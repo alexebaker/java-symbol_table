@@ -8,7 +8,6 @@ public class PrimType extends ASTNode {
     private Token token;
 
     public PrimType(Token token) {
-        super();
         this.token = token;
     }
 

@@ -9,7 +9,6 @@ public class Identifier extends ASTNode {
     private Token token;
 
     public Identifier(Token token) {
-        super();
         this.token = token;
     }
 

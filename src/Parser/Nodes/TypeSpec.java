@@ -10,7 +10,6 @@ public class TypeSpec extends ASTNode {
     private Vector<ASTNode> arraySpecs;
 
     public TypeSpec() {
-        super();
         typeName = null;
         arraySpecs = new Vector<>();
     }

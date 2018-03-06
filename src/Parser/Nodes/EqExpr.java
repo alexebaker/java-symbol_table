@@ -6,15 +6,6 @@ import Parser.Operators.Operator;
 import Tokenizer.TokenReader;
 
 public class EqExpr extends ASTNode {
-    public EqExpr() {
-        super();
-    }
-
-    public String getFPIFStr() {
-        StringBuilder str = new StringBuilder("");
-        return str.toString();
-    }
-
     public static ASTNode parse(TokenReader tr) throws SyntaxError {
         ASTNode node = RelExpr.parse(tr);
         while (EqOp.isOp(tr.peek())) {

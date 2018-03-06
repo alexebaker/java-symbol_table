@@ -6,16 +6,6 @@ import Parser.Operators.Operator;
 import Tokenizer.TokenReader;
 
 public class Term extends ASTNode {
-
-    public Term() {
-        super();
-    }
-
-    public String getFPIFStr() {
-        StringBuilder str = new StringBuilder("");
-        return str.toString();
-    }
-
     public static ASTNode parse(TokenReader tr) throws SyntaxError{
         ASTNode node = Factor.parse(tr);
         while (FactorOp.isOp(tr.peek())) {

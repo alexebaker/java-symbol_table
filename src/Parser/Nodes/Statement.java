@@ -1,5 +1,6 @@
 package Parser.Nodes;
 
+import Compiler.CompilerState;
 import Errors.SyntaxError;
 import Tokenizer.TokenReader;
 import Tokenizer.Tokens.IdentifierToken;
@@ -49,11 +50,11 @@ public class Statement extends ASTNode {
         return str.toString();
     }
 
-    public static ASTNode parse(TokenReader tr) throws SyntaxError {
+    public static ASTNode parse(TokenReader tr, CompilerState cs) throws SyntaxError {
         Statement stmt = new Statement();
         if (tr.peek().equals("{")) {
             tr.read();
-            stmt.addStmt(Statement.parse(tr));
+            stmt.addStmt(Statement.parse(tr, cs));
             if (tr.peek().equals("}")) {
                 tr.read();
             }
@@ -62,12 +63,19 @@ public class Statement extends ASTNode {
             }
         }
         else {
-            stmt.setExpr(Expr.parse(tr));
-            if (tr.peek().equals(";")) {
-                tr.read();
+            try {
+                stmt.setExpr(Expr.parse(tr));
+                if (tr.peek().equals(";")) {
+                    tr.read();
+                }
+                else {
+                    cs.addError(new SyntaxError(tr.read(), ";"));
+                    tr.skipToSemiColon();
+                }
             }
-            else {
-                throw new SyntaxError(tr.read(), ";");
+            catch (SyntaxError ex) {
+                cs.addError(ex);
+                tr.skipToSemiColon();
             }
         }
         return stmt;

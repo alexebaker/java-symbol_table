@@ -35,11 +35,11 @@ public class Def extends ASTNode {
 
     public String getFPIFStr() {
         StringBuilder str = new StringBuilder("");
-        str.append(getTypeSpec());
-        str.append(getVarNames().get(0));
+        str.append(getTypeSpec().getFPIFStr());
+        str.append(getVarNames().get(0).getFPIFStr());
         for (int idx = 1; idx < getVarNames().size(); idx++) {
             str.append(",");
-            str.append(getVarNames().get(idx));
+            str.append(getVarNames().get(idx).getFPIFStr());
         }
         str.append(";");
         return str.toString();

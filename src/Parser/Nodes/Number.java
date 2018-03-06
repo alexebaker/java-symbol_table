@@ -9,7 +9,6 @@ public class Number extends ASTNode {
     private Token token;
 
     public Number(Token token) {
-        super();
         this.token = token;
     }
 

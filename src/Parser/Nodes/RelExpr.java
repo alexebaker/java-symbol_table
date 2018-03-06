@@ -6,16 +6,6 @@ import Parser.Operators.RelOp;
 import Tokenizer.TokenReader;
 
 public class RelExpr extends ASTNode {
-
-    public RelExpr() {
-        super();
-    }
-
-    public String getFPIFStr() {
-        StringBuilder str = new StringBuilder("");
-        return str.toString();
-    }
-
     public static ASTNode parse(TokenReader tr) throws SyntaxError {
         ASTNode node = SimpleExpr.parse(tr);
         while (RelOp.isOp(tr.peek())) {

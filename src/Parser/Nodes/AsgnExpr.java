@@ -31,7 +31,7 @@ public class AsgnExpr extends ASTNode {
                 str.append(")");
             }
             else {
-                str.append(condExpr);
+                str.append(condExpr.getFPIFStr());
             }
         }
         return str.toString();

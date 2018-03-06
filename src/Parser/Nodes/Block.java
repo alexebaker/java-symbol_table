@@ -48,7 +48,7 @@ public class Block extends ASTNode {
 
         while (Statement.beginsStmt(tr.peek())) {
             try {
-                block.addStmt(Statement.parse(tr));
+                block.addStmt(Statement.parse(tr, cs));
             }
             catch (SyntaxError ex) {
                 tr.skipToClosedCurly();

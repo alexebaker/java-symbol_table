@@ -6,16 +6,6 @@ import Tokenizer.TokenReader;
 
 
 public class Expr extends ASTNode {
-
-    public Expr() {
-        super();
-    }
-
-    public String getFPIFStr() {
-        StringBuilder str = new StringBuilder("");
-        return str.toString();
-    }
-
     /**
      * Function to be called to parse an Expression as defined in the grammar.
      *

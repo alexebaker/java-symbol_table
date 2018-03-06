@@ -18,7 +18,7 @@ public class ArraySpec extends ASTNode {
         StringBuilder str = new StringBuilder("");
         str.append("[");
         if (expr != null) {
-            str.append(expr.toString());
+            str.append(expr.getFPIFStr());
         }
         str.append("]");
         return str.toString();

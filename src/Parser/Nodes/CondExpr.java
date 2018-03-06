@@ -31,15 +31,15 @@ public class CondExpr extends ASTNode {
         if (logOrExpr != null) {
             if (expr != null && condExpr != null) {
                 str.append("(");
-                str.append(logOrExpr.toString());
+                str.append(logOrExpr.getFPIFStr());
                 str.append("?");
-                str.append(expr.toString());
+                str.append(expr.getFPIFStr());
                 str.append(":");
-                str.append(condExpr.toString());
+                str.append(condExpr.getFPIFStr());
                 str.append(")");
             }
             else {
-                str.append(logOrExpr);
+                str.append(logOrExpr.getFPIFStr());
             }
         }
         return str.toString();

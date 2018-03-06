@@ -5,16 +5,6 @@ import Parser.Operators.Operator;
 import Tokenizer.TokenReader;
 
 public class LogOrExpr extends ASTNode {
-
-    public LogOrExpr() {
-        super();
-    }
-
-    public String getFPIFStr() {
-        StringBuilder str = new StringBuilder("");
-        return str.toString();
-    }
-
     public static ASTNode parse(TokenReader tr) throws SyntaxError {
         ASTNode node = LogAndExpr.parse(tr);
         while (tr.peek().getValue().equals("||")) {

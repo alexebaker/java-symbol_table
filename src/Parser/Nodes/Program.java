@@ -40,9 +40,7 @@ public class Program extends ASTNode {
     public static ASTNode parse(TokenReader tr, CompilerState cs) {
         //System.out.println("Parsing Program...");
         Program program = new Program();
-
-        ASTNode block = Block.parse(tr, cs);
-        program.addBlock(block);
+        program.addBlock(Block.parse(tr, cs));
 
         if (EOFToken.isToken(tr.peek())) {
             tr.read();

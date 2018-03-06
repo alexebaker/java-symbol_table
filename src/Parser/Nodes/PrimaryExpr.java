@@ -6,16 +6,6 @@ import Tokenizer.Tokens.NumberToken;
 import Tokenizer.TokenReader;
 
 public class PrimaryExpr extends ASTNode {
-
-    public PrimaryExpr() {
-        super();
-    }
-
-    public String getFPIFStr() {
-        StringBuilder str = new StringBuilder("");
-        return str.toString();
-    }
-
     public static ASTNode parse(TokenReader tr) throws SyntaxError {
         if (IdentifierToken.isToken(tr.peek())) {
             return Identifier.parse(tr);
