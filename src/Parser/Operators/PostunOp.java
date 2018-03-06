@@ -1,6 +1,6 @@
 package Parser.Operators;
 
-import Tokenizer.Token;
+import Tokenizer.Tokens.Token;
 
 public class PostunOp extends Operator {
     public PostunOp(Token token) {

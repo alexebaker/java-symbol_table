@@ -19,13 +19,16 @@ public class Main {
         }
 
         LCC lcc = new LCC(cs);
-        int errors = lcc.compile();
+        lcc.compile();
+
+        cs.printAST();
+        cs.pringErrors();
 
         cs.getIO().close();
 
-        if (errors > 9) {
+        if (cs.getErrors().size() > 9) {
             System.exit(10);
         }
-        System.exit(errors);
+        System.exit(cs.getErrors().size());
     }
 }

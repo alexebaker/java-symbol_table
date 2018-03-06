@@ -1,6 +1,6 @@
 package Parser.Operators;
 
-import Tokenizer.Token;
+import Tokenizer.Tokens.Token;
 
 public class PreunOp extends Operator {
     public PreunOp(Token token) {

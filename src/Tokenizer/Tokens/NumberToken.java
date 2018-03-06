@@ -1,6 +1,6 @@
 package Tokenizer.Tokens;
 
-import Tokenizer.Location;
+import Compiler.Location;
 
 public class NumberToken extends Token {
     public NumberToken(String value, Location loc) {
@@ -24,6 +24,11 @@ public class NumberToken extends Token {
      * @return true if token is a Number Token, false otherwise
      */
     public static boolean isToken(Token token) {
-        return token instanceof NumberToken && NumberToken.isToken(token.getValue());
+        return token.getToken().equals("$num") && NumberToken.isToken(token.getValue());
+    }
+
+    public static boolean isDelim(String buf, int nextCh) {
+        String nextStr = Character.toString((char) nextCh);
+        return Token.isDelim(buf, nextCh) || !NumberToken.isToken(buf+nextStr);
     }
 }

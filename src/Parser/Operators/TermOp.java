@@ -1,6 +1,6 @@
 package Parser.Operators;
 
-import Tokenizer.Token;
+import Tokenizer.Tokens.Token;
 
 public class TermOp extends Operator {
     public TermOp(Token token) {

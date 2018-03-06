@@ -2,6 +2,9 @@ package Compiler;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Vector;
+import Errors.Error;
+import Parser.Nodes.ASTNode;
 
 /**
  * Contains the current state of the compiler at any given time
@@ -9,11 +12,15 @@ import java.io.FileReader;
 public class CompilerState {
     private String inputPath;
     private CompilerIO io;
+    private Vector<Error> errors;
+    private ASTNode ast;
 
 
     public CompilerState() {
         this.inputPath = "<stdin>";
         this.io = new CompilerIO();
+        this.errors = new Vector<>();
+        this.ast = null;
     }
 
     public CompilerState(String fileName) {
@@ -27,6 +34,27 @@ public class CompilerState {
             ex.printStackTrace();
             this.io.close();
             System.exit(1);
+        }
+
+        this.errors = new Vector<>();
+        this.ast = null;
+    }
+
+    public Vector<Error> getErrors() {
+        return errors;
+    }
+
+    public void addError(Error error) {
+        errors.add(error);
+    }
+
+    public void printAST() {
+        io.write(ast.getFPIFStr());
+    }
+
+    public void pringErrors() {
+        for (Error error : errors) {
+            System.out.println(error);
         }
     }
 

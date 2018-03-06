@@ -1,6 +1,8 @@
 package Tokenizer.Tokens;
 
-import Tokenizer.Location;
+import Compiler.Location;
+
+import java.security.Key;
 
 public class IdentifierToken extends Token {
     public IdentifierToken(String value, Location loc) {
@@ -24,6 +26,11 @@ public class IdentifierToken extends Token {
      * @return true if token is an Identifier Token, false otherwise
      */
     public static boolean isToken(Token token) {
-        return token instanceof IdentifierToken && IdentifierToken.isToken(token.getValue());
+        return token.getToken().equals("$id") && IdentifierToken.isToken(token.getValue());
+    }
+
+    public static boolean isDelim(String buf, int nextCh) {
+        String nextStr = Character.toString((char) nextCh);
+        return (Token.isDelim(buf, nextCh) || LiteralToken.isToken(nextStr)) && !KeywordToken.isToken(buf+nextStr);
     }
 }

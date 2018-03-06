@@ -4,6 +4,8 @@ import java.nio.BufferOverflowException;
 import java.nio.CharBuffer;
 
 import Compiler.CompilerState;
+import Compiler.Location;
+import Tokenizer.Tokens.*;
 
 public class TokenReader {
     private CompilerState cs;
@@ -41,13 +43,14 @@ public class TokenReader {
         int ch;
         boolean inComment = false;
         CharBuffer charBuffer = CharBuffer.allocate(bufferCapacity);
+        Location loc = null;
 
         while (true) {
             ch = cs.getIO().read();
 
             // First, determine special cases that to not need to be tokenized
             if (EOFToken.isToken(ch)) {
-                return new EOFToken(cs);
+                return new EOFToken(new Location(cs));
             }
             else if (ch == '\n') {
                 inComment = false;
@@ -55,6 +58,9 @@ public class TokenReader {
             }
             else if (Character.isWhitespace(ch) || inComment) {
                 continue;
+            }
+            else if (loc == null) {
+                loc = new Location(cs);
             }
 
             try {
@@ -64,49 +70,47 @@ public class TokenReader {
                 System.err.println("Token exceeded " + bufferCapacity + " bytes.");
                 ex.printStackTrace();
                 cs.getIO().close();
-                System.exit(1);
+                System.exit(100);
             }
 
             String buf = new String(charBuffer.array()).trim();
             int nextCh = cs.getIO().peek();
-            String nextToken = Character.toString((char) nextCh);
 
             // Determine if the token in valid. The inside if statements determines
-            // if the token needs to be written to the output stream
-            if (isComment(buf)) {
+            // if the token needs to be returned
+            if (Token.isComment(buf)) {
                 inComment = true;
                 charBuffer = CharBuffer.allocate(bufferCapacity);
+                loc = null;
             }
             else if (LiteralToken.isToken(buf)) {
                 // The last check for a number token handles the case when a '.' is a literal token and not part of a number
-                if (isDelim(nextCh) || (!LiteralToken.isToken(buf+nextToken) && !isComment(buf+nextToken)) || NumberToken.isToken(nextToken)) {
-                    return new LiteralToken(buf, cs);
+                if (LiteralToken.isDelim(buf, nextCh)) {
+                    return new LiteralToken(buf, loc);
                 }
             }
             else if (KeywordToken.isToken(buf)) {
-                if (isDelim(nextCh) || LiteralToken.isToken(nextToken)) {
-                    return new KeywordToken(buf, cs);
+                if (KeywordToken.isDelim(buf, nextCh)) {
+                    return new KeywordToken(buf, loc);
                 }
             }
             else if (IdentifierToken.isToken(buf)) {
-                if (isDelim(nextCh) || LiteralToken.isToken(nextToken)) {
-                    return new IdentifierToken(buf, cs);
+                if (IdentifierToken.isDelim(buf, nextCh)) {
+                    return new IdentifierToken(buf, loc);
                 }
             }
             else if (NumberToken.isToken(buf)) {
-                // The last check catches numbers which would have more than one '.' in it. If the next token is a '.',
-                // Then is will print out this number and treat the next '.' as a literal token
-                if (isDelim(nextCh) || isNumDelim(nextToken) || !NumberToken.isToken(buf+nextToken)) {
-                    return new NumberToken(buf, cs);
+                if (NumberToken.isDelim(buf, nextCh)) {
+                    return new NumberToken(buf, loc);
                 }
             }
             else {
-                return new IllChrToken(buf, cs);
+                return new IllChrToken(buf, loc);
             }
         }
     }
 
-    public void handleError() {
+    public void skipToSemiColon() {
         while (true) {
             if (EOFToken.isToken(peek())) {
                 return;
@@ -117,36 +121,36 @@ public class TokenReader {
         }
     }
 
-    /**
-     * Basic delimiter check for all tokens
-     *
-     * @param ch Character to check if it is a delimiter or not
-     * @return true if ch is a delimiter, false otherwise
-     */
-    private boolean isDelim(int ch) {
-        return EOFToken.isToken(ch) || Character.isWhitespace(ch) || IllChrToken.isToken(Character.toString((char) ch));
-    }
-
-    /**
-     * Special delimiter cases for numbers.
-     *
-     * @param str String to check if it deliminates a number
-     * @return true if str is a number delimiter, false otherwise
-     */
-    private boolean isNumDelim(String str) {
-        if (str.equals(".")) {
-            return false;
+    public void skipToClosedCurly() {
+        while (true) {
+            if (EOFToken.isToken(peek())) {
+                return;
+            }
+            else if (read().getValue().equals("}")) {
+                return;
+            }
         }
-        return LiteralToken.isToken(str) || KeywordToken.isToken(str) || IdentifierToken.isToken(str);
     }
 
-    /**
-     * Checks for comments
-     *
-     * @param str string to check if it is a comment token
-     * @return true if str is a comment token, false otherwise
-     */
-    private boolean isComment(String str) {
-        return str.equals("//");
+    public static void main(String[] argv) {
+        if (argv.length > 1) {
+            System.err.println("Too many arguments, can only give 0 or 1 argument.");
+            System.exit(1);
+        }
+
+        System.setProperty("line.separator", "\n");
+        CompilerState cs = new CompilerState();
+
+        if (argv.length == 1) {
+            cs = new CompilerState(argv[0]);
+        }
+
+        TokenReader tr = new TokenReader(cs);
+        while (!EOFToken.isToken(tr.peek())) {
+            cs.getIO().write(tr.read().getInfoStr());
+        }
+
+        cs.getIO().close();
+        System.exit(0);
     }
 }

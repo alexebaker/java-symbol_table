@@ -1,6 +1,6 @@
 package Tokenizer.Tokens;
 
-import Tokenizer.Location;
+import Compiler.Location;
 
 public class LiteralToken extends Token {
     public LiteralToken(String token, Location loc) {
@@ -62,6 +62,11 @@ public class LiteralToken extends Token {
      * @return true if token is a Literal Token, false otherwise
      */
     public static boolean isToken(Token token) {
-        return token instanceof LiteralToken && LiteralToken.isToken(token.getValue());
+        return LiteralToken.isToken(token.getValue());
+    }
+
+    public static boolean isDelim(String buf, int nextCh) {
+        String nextStr = Character.toString((char) nextCh);
+        return Token.isDelim(buf, nextCh) || !(LiteralToken.isToken(buf+nextStr) || Token.isComment(buf+nextStr));
     }
 }
