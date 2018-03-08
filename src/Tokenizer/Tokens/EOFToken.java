@@ -1,6 +1,6 @@
 package Tokenizer.Tokens;
 
-import Tokenizer.Location;
+import Compiler.Location;
 
 public class EOFToken extends Token {
     public EOFToken(Location loc) {
@@ -29,6 +29,6 @@ public class EOFToken extends Token {
      * @return true if token is an EOF Token, false otherwise
      */
     public static boolean isToken(Token token) {
-        return token instanceof EOFToken;
+        return token.getToken().equals("$EOF");
     }
 }

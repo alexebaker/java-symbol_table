@@ -1,6 +1,6 @@
 package Tokenizer.Tokens;
 
-import Tokenizer.Location;
+import Compiler.Location;
 
 public class KeywordToken extends Token {
     public KeywordToken(String token, Location loc) {
@@ -48,6 +48,11 @@ public class KeywordToken extends Token {
      * @return true if token is a Keyword Token, false otherwise
      */
     public static boolean isToken(Token token) {
-        return token instanceof KeywordToken && KeywordToken.isToken(token.getValue());
+        return KeywordToken.isToken(token.getValue());
+    }
+
+    public static boolean isDelim(String buf, int nextCh) {
+        String nextStr = Character.toString((char) nextCh);
+        return Token.isDelim(buf, nextCh) || !KeywordToken.isToken(buf+nextStr);
     }
 }

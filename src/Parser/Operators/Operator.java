@@ -1,52 +1,42 @@
 package Parser.Operators;
 
-import Parser.Nodes.ParseNode;
-import Tokenizer.Token;
+import Parser.Nodes.ASTNode;
+import Tokenizer.Tokens.Token;
 
-public class Operator extends ParseNode {
-    private String op;
-    private ParseNode lhs;
-    private ParseNode rhs;
+public class Operator extends ASTNode {
+    private Token op;
+    private ASTNode lhs;
+    private ASTNode rhs;
 
-
-    public Operator() {
-        this("");
-    }
-
-    public Operator(Token token) {
-        this(token.getValue());
-    }
-
-    public Operator(String op) {
+    public Operator(Token op) {
         this.op = op;
         this.lhs = null;
         this.rhs = null;
     }
 
-    public ParseNode getLhs() {
+    public ASTNode getLhs() {
         return lhs;
     }
 
-    public ParseNode getRhs() {
+    public ASTNode getRhs() {
         return rhs;
     }
 
-    public void setLhs(ParseNode lhs) {
+    public void setLhs(ASTNode lhs) {
         this.lhs = lhs;
     }
 
-    public void setRhs(ParseNode rhs) {
+    public void setRhs(ASTNode rhs) {
         this.rhs = rhs;
     }
 
-    @Override
-    public String toString() {
+    public String getFPIFStr() {
         StringBuilder str = new StringBuilder("");
 
         str.append("(");
-        if (lhs != null) str.append(lhs);
-        str.append(op);
-        if (rhs != null) str.append(rhs);
+        if (lhs != null) str.append(lhs.getFPIFStr());
+        str.append(op.getValue());
+        if (rhs != null) str.append(rhs.getFPIFStr());
         str.append(")");
         return str.toString();
     }

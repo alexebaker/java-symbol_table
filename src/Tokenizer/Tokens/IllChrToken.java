@@ -1,6 +1,6 @@
 package Tokenizer.Tokens;
 
-import Tokenizer.Location;
+import Compiler.Location;
 
 public class IllChrToken extends Token {
     public IllChrToken(String value, Location loc) {
@@ -24,6 +24,6 @@ public class IllChrToken extends Token {
      * @return true if token is a Illegal Character Token, false otherwise
      */
     public static boolean isToken(Token token) {
-        return token instanceof IllChrToken && IllChrToken.isToken(token.getValue());
+        return token.getToken().equals("$illchr") && IllChrToken.isToken(token.getValue());
     }
 }
