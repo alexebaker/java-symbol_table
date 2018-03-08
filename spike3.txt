@@ -1,4 +1,4 @@
-SPIKE3 - LOBO-C TYPES AND BLOCKS - VERSION spike3-11
+SPIKE3 - LOBO-C TYPES AND BLOCKS - VERSION spike3-12
 
 ((s3.0)) Key dates
 
@@ -12,7 +12,7 @@ SPIKE3 - LOBO-C TYPES AND BLOCKS - VERSION spike3-11
 'spike3' -- in C, C++, or Java -- that reads a legal LOBO-C block from
 a filename supplied on the command line, or from standard input, then
 prints, to standard output, information about the variable
-declarations and use, and LOBO-C expressions, found within the block.
+declarations and uses, and LOBO-C expressions, found within the block.
 The output format for spike3 is 'block-oriented fully-parenthesized
 infix form' ('BOFPIF'), the details of which are specified below.
 
@@ -100,6 +100,7 @@ STATEMENTS     <- | STATEMENT STATEMENTS
 DEF            <- VAR_DEF
 VAR_DEF        <- TYPE_SPEC VAR_NAMES ";"
 VAR_NAMES      <- VAR_NAME OPT_VAR_NAMES
+VAR_NAME       <- IDENTIFIER
 OPT_VAR_NAMES  <- | "," VAR_NAMES
 TYPE_SPEC      <- TYPE_NAME OPT_ARRAY_SPECS
 TYPE_NAME      <- PRIM_TYPE
@@ -117,7 +118,7 @@ SIMPLE_EXPR    <- TERM | SIMPLE_EXPR TERM_OP TERM
 TERM           <- FACTOR | TERM FACTOR_OP FACTOR
 FACTOR         <- POSTFIX_EXPR | PREUN_OP FACTOR
 POSTFIX_EXPR   <- PRIMARY_EXPR | POSTFIX_EXPR POSTUN_OP | POSTFIX_EXPR ARRAY_SPEC
-OPT_ARRAY_SPECS<- | OPT_ARRAY_SPEC OPT_ARRAY_SPECS
+OPT_ARRAY_SPECS<- | ARRAY_SPEC OPT_ARRAY_SPECS
 ARRAY_SPEC     <- "[" OPT_ARRAY_SIZE "]"
 OPT_ARRAY_SIZE <- | EXPR
 PRIMARY_EXPR   <- IDENTIFIER | NUMBER | "(" EXPR ")"
@@ -174,7 +175,7 @@ unambiguous representation of a spike3 parse tree.
 ((s3.4.4)) <THIS SECTION DELETED>
 
 ((s3.4.5)) The Variables Summary Report (VSR) lists, one per line,
-variable description information (VDI) about distinct variable that appears
+variable description information (VDI) about variables that appear
 within the block, plus information associated with each.  The VDIs are
 listed in lexicographic order of the variable names, using the ASCII
 collating sequence.  At the end of the VSR, a single blank line
@@ -188,16 +189,20 @@ single spaces and followed by a newline.
 ((s3.4.5.1.1)) The first VDI component is the name of the variable,
 
 ((s3.4.5.1.2)) The second VDI component is one of three words, depending
-on circumstances:
+on circumstances within the SPIKE3 BLOCK:
 
-  ((s3.4.5.1.2.1)) The word 'unused', if the variable was declared but
-  then never used, or
+  ((s3.4.5.1.2.1)) The word 'unused', if the variable was declared in
+  the BLOCK's DEFS, but then never used in the BLOCK's STATEMENTS.
 
-  ((s3.4.5.1.2.2)) The word 'undeclared', if the variable was used
-  without having been declared, or
+    ((s3.4.5.1.2.1.1)) If a variable 'foo' appears in DEFS as part of
+    the _declaration_ of another variable, _that_ appearance of 'foo'
+    is neither a 'declaration' nor a 'use' for the spike3 VDI.
+
+  ((s3.4.5.1.2.2)) The word 'undeclared', if the variable was used in
+  STATEMENTS without having been declared in DEFS, or
 
   ((s3.4.5.1.2.3)) The word 'okay', if the variable was both declared
-  and used.
+  in DEFS and used in STATEMENTS.
 
 ((s3.4.5.1.2)) The third VDI component is the type of the variable,
 unless the second component is 'undeclared', in which case the third
@@ -391,4 +396,13 @@ error recovery was performed.
     ((s3.9.2.1.1)) Correct and complete grammar (tx John M)
 
     ((s3.9.2.1.2)) Add (s3.5.3) and (s3.5.4)
+
+((s3.9.3)) Version spike3-12 released Tue Mar  6 16:30:47 2018
+
+  ((s3.9.3.1)) CHANGES:
+
+    ((s3.9.3.1.1)) Try again to complete grammar grr (tx John M, Arpit)
+
+    ((s3.9.3.1.2)) Rework (s3.4.5.1.2) to exclude DEFS from possible
+    variable uses (tx Brendan)
 
