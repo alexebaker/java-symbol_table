@@ -3,6 +3,7 @@ package Parser.Nodes;
 import Errors.SyntaxError;
 import Tokenizer.TokenReader;
 import Tokenizer.Tokens.Token;
+import Compiler.CompilerState;
 
 public class PrimType extends ASTNode {
     private Token token;
@@ -11,13 +12,17 @@ public class PrimType extends ASTNode {
         this.token = token;
     }
 
-    public String getFPIFStr() {
-        StringBuilder str = new StringBuilder("");
-        str.append(token.getValue());
-        return str.toString();
+    @Override
+    public String getASTR() {
+        return token.getValue();
     }
 
-    public static ASTNode parse(TokenReader tr) throws SyntaxError {
+    @Override
+    public String toString() {
+        return token.toString();
+    }
+
+    public static ASTNode parse(TokenReader tr, CompilerState cs) throws SyntaxError {
         if (PrimType.isType(tr.peek())) {
             return new PrimType(tr.read());
         }

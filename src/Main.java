@@ -22,7 +22,7 @@ public class Main {
         lcc.compile();
 
         cs.printAST();
-        cs.pringErrors();
+        cs.printErrors();
 
         cs.getIO().close();
 

@@ -48,13 +48,19 @@ public class CompilerState {
         errors.add(error);
     }
 
-    public void printAST() {
-        io.write(ast.getFPIFStr());
+    public void setAST(ASTNode ast) {
+        this.ast = ast;
     }
 
-    public void pringErrors() {
+    public void printAST() {
+        if (ast != null) {
+            io.write(ast.getASTR());
+        }
+    }
+
+    public void printErrors() {
         for (Error error : errors) {
-            System.out.println(error);
+            System.err.println(error);
         }
     }
 

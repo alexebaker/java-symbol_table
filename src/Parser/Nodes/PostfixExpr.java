@@ -28,7 +28,7 @@ public class PostfixExpr extends ASTNode {
         this.primaryExpr = primaryExpr;
     }
 
-    public String getFPIFStr() {
+    public String getASTR() {
         StringBuilder str = new StringBuilder("");
         if (primaryExpr != null) {
             str.append("(");
@@ -57,10 +57,10 @@ public class PostfixExpr extends ASTNode {
                 node = temp;
             }
             else {
-                ASTNode temp = new PostfixExpr();
-                ((PostfixExpr) temp).setPrimaryExpr(node);
-                ((PostfixExpr) temp).setArraySpec(ArraySpec.parse(tr));
-                ((PostfixExpr) temp).setPostfixExpr(PostfixExpr.parse(tr));
+                PostfixExpr temp = new PostfixExpr();
+                temp.setPrimaryExpr(node);
+                temp.setArraySpec(ArraySpec.parse(tr));
+                temp.setPostfixExpr(PostfixExpr.parse(tr));
                 node = temp;
             }
         }

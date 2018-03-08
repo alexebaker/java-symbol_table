@@ -58,7 +58,7 @@ public class Token {
     }
 
     public static boolean isDelim(String buf, int nextCh) {
-        return EOFToken.isToken(nextCh) || Character.isWhitespace(nextCh);
+        return EOFToken.isToken(nextCh) || Character.isWhitespace(nextCh) || IllChrToken.isToken(Character.toString((char) nextCh));
     }
 
     public static boolean isComment(String str) {

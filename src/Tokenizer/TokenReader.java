@@ -149,6 +149,7 @@ public class TokenReader {
         while (!EOFToken.isToken(tr.peek())) {
             cs.getIO().write(tr.read().getInfoStr());
         }
+        cs.getIO().write(tr.read().getInfoStr());
 
         cs.getIO().close();
         System.exit(0);

@@ -11,6 +11,6 @@ public class LCC {
 
     public void compile() {
         TokenParser tp = new TokenParser(cs);
-        tp.parse();
+        cs.setAST(tp.parse());
     }
 }

@@ -53,6 +53,6 @@ public class KeywordToken extends Token {
 
     public static boolean isDelim(String buf, int nextCh) {
         String nextStr = Character.toString((char) nextCh);
-        return Token.isDelim(buf, nextCh) || !KeywordToken.isToken(buf+nextStr);
+        return (Token.isDelim(buf, nextCh) || LiteralToken.isToken(nextStr)) && !KeywordToken.isToken(buf+nextStr);
     }
 }

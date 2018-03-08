@@ -30,13 +30,13 @@ public class Operator extends ASTNode {
         this.rhs = rhs;
     }
 
-    public String getFPIFStr() {
+    public String getASTR() {
         StringBuilder str = new StringBuilder("");
 
         str.append("(");
-        if (lhs != null) str.append(lhs.getFPIFStr());
+        if (lhs != null) str.append(lhs.getASTR());
         str.append(op.getValue());
-        if (rhs != null) str.append(rhs.getFPIFStr());
+        if (rhs != null) str.append(rhs.getASTR());
         str.append(")");
         return str.toString();
     }

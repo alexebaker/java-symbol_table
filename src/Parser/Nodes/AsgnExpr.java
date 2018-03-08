@@ -2,6 +2,7 @@ package Parser.Nodes;
 
 import Errors.SyntaxError;
 import Tokenizer.TokenReader;
+import Compiler.CompilerState;
 
 public class AsgnExpr extends ASTNode {
     private ASTNode asgnExpr;
@@ -20,29 +21,45 @@ public class AsgnExpr extends ASTNode {
         this.condExpr = condExpr;
     }
 
-    public String getFPIFStr() {
+    public String getASTR() {
         StringBuilder str = new StringBuilder("");
         if (condExpr != null) {
             if (asgnExpr != null) {
                 str.append("(");
-                str.append(condExpr.getFPIFStr());
+                str.append(condExpr.getASTR());
                 str.append("=");
-                str.append(asgnExpr.getFPIFStr());
+                str.append(asgnExpr.getASTR());
                 str.append(")");
             }
             else {
-                str.append(condExpr.getFPIFStr());
+                str.append(condExpr.getASTR());
             }
         }
         return str.toString();
     }
 
-    public static ASTNode parse(TokenReader tr) throws SyntaxError {
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder("");
+        if (condExpr != null) {
+            if (asgnExpr != null) {
+                str.append(condExpr);
+                str.append("=");
+                str.append(asgnExpr);
+            }
+            else {
+                str.append(condExpr.getASTR());
+            }
+        }
+        return str.toString();
+    }
+
+    public static ASTNode parse(TokenReader tr, CompilerState cs) throws SyntaxError {
         AsgnExpr asgnExpr = new AsgnExpr();
         asgnExpr.setCondExpr(CondExpr.parse(tr));
         if (tr.peek().getValue().equals("=")) {
             tr.read();
-            asgnExpr.setAsgnExpr(AsgnExpr.parse(tr));
+            asgnExpr.setAsgnExpr(AsgnExpr.parse(tr, cs));
         }
         return asgnExpr;
     }

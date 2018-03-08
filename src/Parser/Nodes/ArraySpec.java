@@ -2,6 +2,7 @@ package Parser.Nodes;
 
 import Errors.SyntaxError;
 import Tokenizer.TokenReader;
+import Compiler.CompilerState;
 
 public class ArraySpec extends ASTNode {
     private ASTNode expr;
@@ -14,17 +15,29 @@ public class ArraySpec extends ASTNode {
         this.expr = expr;
     }
 
-    public String getFPIFStr() {
+    @Override
+    public String getASTR() {
         StringBuilder str = new StringBuilder("");
         str.append("[");
         if (expr != null) {
-            str.append(expr.getFPIFStr());
+            str.append(expr.getASTR());
         }
         str.append("]");
         return str.toString();
     }
 
-    public static ASTNode parse(TokenReader tr) throws SyntaxError {
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder("");
+        str.append("[");
+        if (expr != null) {
+            str.append(expr);
+        }
+        str.append("]");
+        return str.toString();
+    }
+
+    public static ASTNode parse(TokenReader tr, CompilerState cs) throws SyntaxError {
         if (tr.peek().getValue().equals("[")) {
             tr.read();
             ArraySpec arraySpec = new ArraySpec();
@@ -33,7 +46,7 @@ public class ArraySpec extends ASTNode {
                 return arraySpec;
             }
             else {
-                arraySpec.setExpr(Expr.parse(tr));
+                arraySpec.setExpr(Expr.parse(tr, cs));
                 if (tr.peek().getValue().equals("]")) {
                     tr.read();
                     return arraySpec;

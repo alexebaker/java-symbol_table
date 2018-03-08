@@ -20,7 +20,7 @@ public class Identifier extends ASTNode {
         return token;
     }
 
-    public String getFPIFStr() {
+    public String getASTR() {
         StringBuilder str = new StringBuilder("");
         str.append(token.getValue());
         return str.toString();

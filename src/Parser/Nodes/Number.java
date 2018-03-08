@@ -12,7 +12,7 @@ public class Number extends ASTNode {
         this.token = token;
     }
 
-    public String getFPIFStr() {
+    public String getASTR() {
         return token.getValue();
     }
 

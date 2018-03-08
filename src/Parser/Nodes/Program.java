@@ -23,10 +23,21 @@ public class Program extends ASTNode {
         return blocks;
     }
 
-    public String getFPIFStr() {
+    @Override
+    public String getASTR() {
         StringBuilder str = new StringBuilder("");
         for (ASTNode block : getBlocks()) {
-            str.append(block.getFPIFStr());
+            str.append(block.getASTR());
+            str.append("\n");
+        }
+        return str.toString();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder("");
+        for (ASTNode block : getBlocks()) {
+            str.append(block);
             str.append("\n");
         }
         return str.toString();
@@ -38,7 +49,6 @@ public class Program extends ASTNode {
      * @return true if the parse was successful, false otherwise
      */
     public static ASTNode parse(TokenReader tr, CompilerState cs) {
-        //System.out.println("Parsing Program...");
         Program program = new Program();
         program.addBlock(Block.parse(tr, cs));
 

@@ -35,15 +35,15 @@ public class Statement extends ASTNode {
         return stmts;
     }
 
-    public String getFPIFStr() {
+    public String getASTR() {
         StringBuilder str = new StringBuilder("");
         if (expr != null) {
-            str.append(expr.getFPIFStr());
+            str.append(expr.getASTR());
         }
         else {
             for (ASTNode stmt : getStmts()) {
                 str.append("{");
-                str.append(stmt.getFPIFStr());
+                str.append(stmt.getASTR());
                 str.append("}");
             }
         }
@@ -65,7 +65,7 @@ public class Statement extends ASTNode {
         else {
             try {
                 stmt.setExpr(Expr.parse(tr));
-                if (tr.peek().equals(";")) {
+                if (tr.peek().getValue().equals(";")) {
                     tr.read();
                 }
                 else {

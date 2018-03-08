@@ -2,12 +2,12 @@ package Parser.Nodes;
 
 
 public abstract class ASTNode {
-    public String getFPIFStr() {
+    public String getASTR() {
         return "";
     }
 
     @Override
     public String toString() {
-        return getFPIFStr();
+        return getASTR();
     }
 }

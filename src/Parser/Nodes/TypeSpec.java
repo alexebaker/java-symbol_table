@@ -2,6 +2,7 @@ package Parser.Nodes;
 
 import Errors.SyntaxError;
 import Tokenizer.TokenReader;
+import Compiler.CompilerState;
 
 import java.util.Vector;
 
@@ -30,27 +31,34 @@ public class TypeSpec extends ASTNode {
         return typeName;
     }
 
-    public static ASTNode parse(TokenReader tr) throws SyntaxError {
-        TypeSpec typeSpec = new TypeSpec();
-        try {
-            typeSpec.setTypeName(PrimType.parse(tr));
-
-            while (tr.peek().equals("[")) {
-                typeSpec.addArraySpec(ArraySpec.parse(tr));
-            }
-        }
-        catch (SyntaxError ex) {
-            throw ex;
-        }
-        return typeSpec;
-    }
-
-    public String getFPIFStr() {
+    @Override
+    public String getASTR() {
         StringBuilder str = new StringBuilder("");
-        str.append(typeName.getFPIFStr());
+        str.append(typeName.getASTR());
         for (ASTNode arraySpec : getArraySpecs()) {
-            str.append(arraySpec.getFPIFStr());
+            str.append(arraySpec.getASTR());
         }
         return str.toString();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder("");
+        str.append(typeName);
+        for (ASTNode arraySpec : getArraySpecs()) {
+            str.append(arraySpec);
+        }
+        str.append(" ");
+        return str.toString();
+    }
+
+    public static ASTNode parse(TokenReader tr, CompilerState cs) throws SyntaxError {
+        TypeSpec typeSpec = new TypeSpec();
+        typeSpec.setTypeName(PrimType.parse(tr, cs));
+
+        while (tr.peek().getValue().equals("[")) {
+            typeSpec.addArraySpec(ArraySpec.parse(tr, cs));
+        }
+        return typeSpec;
     }
 }

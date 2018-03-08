@@ -26,20 +26,20 @@ public class CondExpr extends ASTNode {
         this.expr = expr;
     }
 
-    public String getFPIFStr() {
+    public String getASTR() {
         StringBuilder str = new StringBuilder("");
         if (logOrExpr != null) {
             if (expr != null && condExpr != null) {
                 str.append("(");
-                str.append(logOrExpr.getFPIFStr());
+                str.append(logOrExpr.getASTR());
                 str.append("?");
-                str.append(expr.getFPIFStr());
+                str.append(expr.getASTR());
                 str.append(":");
-                str.append(condExpr.getFPIFStr());
+                str.append(condExpr.getASTR());
                 str.append(")");
             }
             else {
-                str.append(logOrExpr.getFPIFStr());
+                str.append(logOrExpr.getASTR());
             }
         }
         return str.toString();
