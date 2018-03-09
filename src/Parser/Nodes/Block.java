@@ -4,6 +4,8 @@ import Compiler.CompilerState;
 import Errors.SyntaxError;
 import Tokenizer.TokenReader;
 import Compiler.SymbolTable;
+import Tokenizer.Tokens.EOFToken;
+import Tokenizer.Tokens.Token;
 
 import java.util.Vector;
 
@@ -79,8 +81,12 @@ public class Block extends ASTNode {
                 block.addDef(Def.parse(cs, block.getSymbolTable()));
             }
             catch (SyntaxError ex) {
-                tr.skipToSemiColon();
                 cs.addError(ex);
+                Token recoveredToken = tr.recoverFromError();
+                if (!recoveredToken.getValue().equals(";")) {
+                    cs.addError(new SyntaxError(recoveredToken, ";"));
+                    return block;
+                }
             }
         }
 
@@ -90,8 +96,10 @@ public class Block extends ASTNode {
                 block.addStmt(Statement.parse(cs, block.getSymbolTable()));
             }
             catch (SyntaxError ex) {
-                tr.skipToClosedCurly();
                 cs.addError(ex);
+                if (EOFToken.isToken(ex.getToken())) {
+                    return block;
+                }
             }
         }
         return block;

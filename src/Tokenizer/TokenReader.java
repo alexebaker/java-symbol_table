@@ -110,25 +110,16 @@ public class TokenReader {
         }
     }
 
-    public void skipToSemiColon() {
+    public Token recoverFromError() {
         while (true) {
-            if (EOFToken.isToken(peek())) {
-                return;
+            Token token = peek();
+            if (EOFToken.isToken(token)) {
+                return token;
             }
-            else if (read().getValue().equals(";")) {
-                return;
+            else if (token.getValue().equals(";") || token.getValue().equals("}")) {
+                return read();
             }
-        }
-    }
-
-    public void skipToClosedCurly() {
-        while (true) {
-            if (EOFToken.isToken(peek())) {
-                return;
-            }
-            else if (read().getValue().equals("}")) {
-                return;
-            }
+            read();
         }
     }
 

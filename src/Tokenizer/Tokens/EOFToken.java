@@ -7,11 +7,6 @@ public class EOFToken extends Token {
         super("$EOF", loc);
     }
 
-    @Override
-    public String toString() {
-        return "";
-    }
-
     /**
      * Checks if ch is a valid EOF Token
      *

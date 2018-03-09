@@ -78,17 +78,23 @@ public class Statement extends ASTNode {
         else {
             try {
                 stmt.setExpr(Expr.parse(cs, st));
-                if (tr.peek().getValue().equals(";")) {
+                Token nextToken = tr.peek();
+                if (nextToken.getValue().equals(";")) {
                     tr.read();
                 }
                 else {
-                    cs.addError(new SyntaxError(tr.read(), ";"));
-                    tr.skipToSemiColon();
+                    if (!nextToken.getValue().equals("}")) {
+                        nextToken = tr.read();
+                    }
+                    throw new SyntaxError(nextToken, ";");
                 }
             }
             catch (SyntaxError ex) {
                 cs.addError(ex);
-                tr.skipToSemiColon();
+                Token recoveredToken = tr.recoverFromError();
+                if (!recoveredToken.getValue().equals(";")) {
+                    throw new SyntaxError(recoveredToken, ";");
+                }
             }
         }
         return stmt;

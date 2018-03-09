@@ -28,6 +28,14 @@ public class SymbolTable {
        symbolTable.put(name, new VDI(name, "unused", type));
     }
 
+    public void removeDeclaration(Token name) {
+        symbolTable.remove(name);
+    }
+
+    public boolean alreadyDeclared(Token name) {
+        return symbolTable.containsKey(name);
+    }
+
     public void setUsed(Token name) {
         if (!inDef) {
             VDI vdi;
@@ -47,8 +55,7 @@ public class SymbolTable {
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder("");
-        SortedSet<Token> keys = new TreeSet<>(symbolTable.keySet());
-        for (Token name : keys) {
+        for (Token name : new TreeSet<>(symbolTable.keySet())) {
             str.append(symbolTable.get(name));
             str.append("\n");
         }
