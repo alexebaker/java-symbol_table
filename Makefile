@@ -15,6 +15,7 @@ compile: clean
 
 clean: FORCE
 	@rm -rf out/* spike$(SPIKE).jar
+	@ find . -name "*.class" -delete
 
 TEST_FILES:=$(wildcard tests/*.$(TEST_SUFFIX)i)
 TEST_RESULTS:=$(patsubst tests/%.$(TEST_SUFFIX)i, tests/%.$(TEST_SUFFIX)o, $(TEST_FILES))
