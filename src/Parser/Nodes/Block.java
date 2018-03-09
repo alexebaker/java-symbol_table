@@ -36,6 +36,10 @@ public class Block extends ASTNode {
         return stmts;
     }
 
+    public SymbolTable getSymbolTable() {
+        return symbolTable;
+    }
+
     @Override
     public String getVSR() {
         StringBuilder str = new StringBuilder("");
@@ -65,12 +69,14 @@ public class Block extends ASTNode {
         return str.toString();
     }
 
-    public static ASTNode parse(TokenReader tr, CompilerState cs) {
+    public static ASTNode parse(CompilerState cs, SymbolTable st) {
+        TokenReader tr = cs.getTr();
         Block block = new Block();
 
+        block.getSymbolTable().setInDef(true);
         while (Def.beginsDef(tr.peek())) {
             try {
-                block.addDef(Def.parse(tr, cs));
+                block.addDef(Def.parse(cs, block.getSymbolTable()));
             }
             catch (SyntaxError ex) {
                 tr.skipToSemiColon();
@@ -78,9 +84,10 @@ public class Block extends ASTNode {
             }
         }
 
+        block.getSymbolTable().setInDef(false);
         while (Statement.beginsStmt(tr.peek())) {
             try {
-                block.addStmt(Statement.parse(tr, cs));
+                block.addStmt(Statement.parse(cs, block.getSymbolTable()));
             }
             catch (SyntaxError ex) {
                 tr.skipToClosedCurly();

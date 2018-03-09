@@ -4,6 +4,7 @@ import Errors.SyntaxError;
 import Parser.Operators.Operator;
 import Tokenizer.TokenReader;
 import Compiler.CompilerState;
+import Compiler.SymbolTable;
 
 
 public class Expr extends ASTNode {
@@ -12,12 +13,13 @@ public class Expr extends ASTNode {
      *
      * @return true if the parse was successful, false otherwise
      */
-    public static ASTNode parse(TokenReader tr, CompilerState cs) throws SyntaxError {
-        ASTNode node = AsgnExpr.parse(tr, cs);
+    public static ASTNode parse(CompilerState cs, SymbolTable st) throws SyntaxError {
+        TokenReader tr = cs.getTr();
+        ASTNode node = AsgnExpr.parse(cs, st);
         while (tr.peek().getValue().equals(",")) {
             Operator temp = new Operator(tr.read());
             temp.setLhs(node);
-            temp.setRhs(AsgnExpr.parse(tr, cs));
+            temp.setRhs(AsgnExpr.parse(cs, st));
             node = temp;
         }
         return node;

@@ -1,24 +1,25 @@
 package Parser.Nodes;
 
 import Errors.SyntaxError;
-import Parser.Operators.PreunOp;
 import Tokenizer.Tokens.IdentifierToken;
 import Tokenizer.Tokens.NumberToken;
 import Tokenizer.TokenReader;
 import Compiler.CompilerState;
+import Compiler.SymbolTable;
 import Tokenizer.Tokens.Token;
 
 public class PrimaryExpr extends ASTNode {
-    public static ASTNode parse(TokenReader tr, CompilerState cs) throws SyntaxError {
+    public static ASTNode parse(CompilerState cs, SymbolTable st) throws SyntaxError {
+        TokenReader tr = cs.getTr();
         if (IdentifierToken.isToken(tr.peek())) {
-            return Identifier.parse(tr, cs);
+            return Identifier.parse(cs, st);
         }
         else if (NumberToken.isToken(tr.peek())) {
-            return Number.parse(tr, cs);
+            return Number.parse(cs, st);
         }
         else if (tr.peek().getValue().equals("(")) {
             tr.read();
-            ASTNode node = Expr.parse(tr, cs);
+            ASTNode node = Expr.parse(cs, st);
             if (tr.peek().getValue().equals(")")) {
                 tr.read();
                 return node;

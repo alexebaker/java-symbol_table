@@ -5,6 +5,7 @@ import Tokenizer.TokenReader;
 import Tokenizer.Tokens.IdentifierToken;
 import Tokenizer.Tokens.Token;
 import Compiler.CompilerState;
+import Compiler.SymbolTable;
 
 public class Identifier extends ASTNode {
     private Token token;
@@ -26,9 +27,12 @@ public class Identifier extends ASTNode {
         return token.getValue();
     }
 
-    public static ASTNode parse(TokenReader tr, CompilerState cs) throws SyntaxError {
+    public static ASTNode parse(CompilerState cs, SymbolTable st) throws SyntaxError {
+        TokenReader tr = cs.getTr();
         if (IdentifierToken.isToken(tr.peek())) {
-            return new Identifier(tr.read());
+            Identifier id = new Identifier(tr.read());
+            st.setUsed(id.getToken());
+            return id;
         }
         else {
             throw new SyntaxError(tr.read(), "IDENTIFIER");

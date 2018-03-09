@@ -3,6 +3,7 @@ package Parser.Nodes;
 import Errors.SyntaxError;
 import Tokenizer.TokenReader;
 import Compiler.CompilerState;
+import Compiler.SymbolTable;
 
 public class ArraySpec extends ASTNode {
     private ASTNode expr;
@@ -26,7 +27,8 @@ public class ArraySpec extends ASTNode {
         return str.toString();
     }
 
-    public static ASTNode parse(TokenReader tr, CompilerState cs) throws SyntaxError {
+    public static ASTNode parse(CompilerState cs, SymbolTable st) throws SyntaxError {
+        TokenReader tr = cs.getTr();
         if (tr.peek().getValue().equals("[")) {
             tr.read();
             ArraySpec arraySpec = new ArraySpec();
@@ -35,7 +37,7 @@ public class ArraySpec extends ASTNode {
                 return arraySpec;
             }
             else {
-                arraySpec.setExpr(Expr.parse(tr, cs));
+                arraySpec.setExpr(Expr.parse(cs, st));
                 if (tr.peek().getValue().equals("]")) {
                     tr.read();
                     return arraySpec;

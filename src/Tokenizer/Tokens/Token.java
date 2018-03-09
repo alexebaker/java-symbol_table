@@ -5,7 +5,7 @@ import Compiler.Location;
 /**
  * Base Token class for the compiler
  */
-public class Token {
+public class Token implements Comparable<Token> {
     private String token;
     private String value;
     private Location loc;
@@ -55,6 +55,28 @@ public class Token {
     @Override
     public String toString() {
         return getValue();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Token) {
+            return equals((Token) obj);
+        }
+        return false;
+    }
+
+    public boolean equals(Token token) {
+        return getValue().equals(token.getValue());
+    }
+
+    @Override
+    public int hashCode() {
+        return getValue().hashCode();
+    }
+
+    @Override
+    public int compareTo(Token o) {
+        return getValue().compareTo(o.getValue());
     }
 
     public static boolean isDelim(String buf, int nextCh) {

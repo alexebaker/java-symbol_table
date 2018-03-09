@@ -5,6 +5,7 @@ import Tokenizer.TokenReader;
 import Tokenizer.Tokens.IdentifierToken;
 import Tokenizer.Tokens.Token;
 import Compiler.CompilerState;
+import Compiler.SymbolTable;
 
 import java.util.Vector;
 
@@ -52,16 +53,19 @@ public class Def extends ASTNode {
         return str.toString();
     }
 
-    public static ASTNode parse(TokenReader tr, CompilerState cs) throws SyntaxError {
+    public static ASTNode parse(CompilerState cs, SymbolTable st) throws SyntaxError {
+        TokenReader tr = cs.getTr();
         Def def = new Def();
-        def.setTypeSpec(TypeSpec.parse(tr, cs));
+        def.setTypeSpec(TypeSpec.parse(cs, st));
 
         if (!IdentifierToken.isToken(tr.peek())) {
             throw new SyntaxError(tr.read(), "IDENTIFIER");
         }
 
         while (IdentifierToken.isToken(tr.peek())) {
-            def.addVarName(Identifier.parse(tr, cs));
+            Identifier varName = (Identifier) Identifier.parse(cs, st);
+            def.addVarName(varName);
+            st.addDeclaration(varName.getToken(), def.getTypeSpec());
             if (tr.peek().getValue().equals(",")) {
                 tr.read();
             }

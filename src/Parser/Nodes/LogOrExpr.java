@@ -4,14 +4,16 @@ import Errors.SyntaxError;
 import Parser.Operators.Operator;
 import Tokenizer.TokenReader;
 import Compiler.CompilerState;
+import Compiler.SymbolTable;
 
 public class LogOrExpr extends ASTNode {
-    public static ASTNode parse(TokenReader tr, CompilerState cs) throws SyntaxError {
-        ASTNode node = LogAndExpr.parse(tr, cs);
+    public static ASTNode parse(CompilerState cs, SymbolTable st) throws SyntaxError {
+        TokenReader tr = cs.getTr();
+        ASTNode node = LogAndExpr.parse(cs, st);
         while (tr.peek().getValue().equals("||")) {
             Operator temp = new Operator(tr.read());
             temp.setLhs(node);
-            temp.setRhs(LogAndExpr.parse(tr, cs));
+            temp.setRhs(LogAndExpr.parse(cs, st));
             node = temp;
         }
         return node;

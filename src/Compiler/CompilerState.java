@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.util.Vector;
 import Errors.Error;
 import Parser.Nodes.ASTNode;
+import Tokenizer.TokenReader;
 
 /**
  * Contains the current state of the compiler at any given time
@@ -12,6 +13,7 @@ import Parser.Nodes.ASTNode;
 public class CompilerState {
     private String inputPath;
     private CompilerIO io;
+    private TokenReader tr;
     private Vector<Error> errors;
     private ASTNode ast;
 
@@ -19,6 +21,7 @@ public class CompilerState {
     public CompilerState() {
         this.inputPath = "<stdin>";
         this.io = new CompilerIO();
+        this.tr = new TokenReader(this);
         this.errors = new Vector<>();
         this.ast = null;
     }
@@ -36,6 +39,7 @@ public class CompilerState {
             System.exit(1);
         }
 
+        this.tr = new TokenReader(this);
         this.errors = new Vector<>();
         this.ast = null;
     }
@@ -62,6 +66,10 @@ public class CompilerState {
         for (Error error : errors) {
             System.err.println(error);
         }
+    }
+
+    public TokenReader getTr() {
+        return tr;
     }
 
     /**

@@ -3,6 +3,7 @@ package Parser.Nodes;
 import Errors.SyntaxError;
 import Tokenizer.TokenReader;
 import Compiler.CompilerState;
+import Compiler.SymbolTable;
 
 public class CondExpr extends ASTNode {
     private ASTNode logOrExpr;
@@ -47,15 +48,16 @@ public class CondExpr extends ASTNode {
         return str.toString();
     }
 
-    public static ASTNode parse(TokenReader tr, CompilerState cs) throws SyntaxError {
+    public static ASTNode parse(CompilerState cs, SymbolTable st) throws SyntaxError {
+        TokenReader tr = cs.getTr();
         CondExpr condExpr = new CondExpr();
-        condExpr.setLogOrExpr(LogOrExpr.parse(tr, cs));
+        condExpr.setLogOrExpr(LogOrExpr.parse(cs, st));
         if (tr.peek().getValue().equals("?")) {
             tr.read();
-            condExpr.setExpr(Expr.parse(tr, cs));
+            condExpr.setExpr(Expr.parse(cs, st));
             if (tr.peek().getValue().equals(":")) {
                 tr.read();
-                condExpr.setCondExpr(CondExpr.parse(tr, cs));
+                condExpr.setCondExpr(CondExpr.parse(cs, st));
             }
             else {
                 throw new SyntaxError(tr.read(), ":");

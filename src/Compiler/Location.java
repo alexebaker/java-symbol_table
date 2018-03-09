@@ -22,4 +22,21 @@ public class Location {
     public long getCharCount() {
         return charCount;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Location) {
+            return equals((Location) obj);
+        }
+        return false;
+    }
+
+    public boolean equals(Location loc) {
+        return path.equals(loc.getPath()) && lineCount == loc.getLineCount() && charCount == loc.getCharCount();
+    }
+
+    @Override
+    public int hashCode() {
+        return (path.hashCode() * (int) lineCount - (int) charCount) * 97;
+    }
 }

@@ -3,6 +3,7 @@ package Parser.Nodes;
 import Errors.SyntaxError;
 import Tokenizer.TokenReader;
 import Compiler.CompilerState;
+import Compiler.SymbolTable;
 import Tokenizer.Tokens.EOFToken;
 
 import java.util.Vector;
@@ -56,9 +57,10 @@ public class Program extends ASTNode {
      *
      * @return true if the parse was successful, false otherwise
      */
-    public static ASTNode parse(TokenReader tr, CompilerState cs) {
+    public static ASTNode parse(CompilerState cs, SymbolTable st) {
+        TokenReader tr = cs.getTr();
         Program program = new Program();
-        program.addBlock(Block.parse(tr, cs));
+        program.addBlock(Block.parse(cs, st));
 
         if (EOFToken.isToken(tr.peek())) {
             tr.read();

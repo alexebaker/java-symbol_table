@@ -3,6 +3,7 @@ package Parser.Nodes;
 import Errors.SyntaxError;
 import Tokenizer.TokenReader;
 import Compiler.CompilerState;
+import Compiler.SymbolTable;
 
 public class AsgnExpr extends ASTNode {
     private ASTNode asgnExpr;
@@ -39,12 +40,13 @@ public class AsgnExpr extends ASTNode {
         return str.toString();
     }
 
-    public static ASTNode parse(TokenReader tr, CompilerState cs) throws SyntaxError {
+    public static ASTNode parse(CompilerState cs, SymbolTable st) throws SyntaxError {
+        TokenReader tr = cs.getTr();
         AsgnExpr asgnExpr = new AsgnExpr();
-        asgnExpr.setCondExpr(CondExpr.parse(tr, cs));
+        asgnExpr.setCondExpr(CondExpr.parse(cs, st));
         if (tr.peek().getValue().equals("=")) {
             tr.read();
-            asgnExpr.setAsgnExpr(AsgnExpr.parse(tr, cs));
+            asgnExpr.setAsgnExpr(AsgnExpr.parse(cs, st));
         }
         return asgnExpr;
     }

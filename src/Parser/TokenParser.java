@@ -6,16 +6,14 @@ import Parser.Nodes.Program;
 import Tokenizer.*;
 
 public class TokenParser {
-    TokenReader tr;
     CompilerState cs;
 
     public TokenParser(CompilerState cs) {
-        this.tr = new TokenReader(cs);
         this.cs = cs;
     }
 
     public ASTNode parse() {
-        return Program.parse(tr, cs);
+        return Program.parse(cs, null);
     }
 
     public static void main(String[] argv) {

@@ -5,14 +5,16 @@ import Parser.Operators.Operator;
 import Parser.Operators.PreunOp;
 import Tokenizer.TokenReader;
 import Compiler.CompilerState;
+import Compiler.SymbolTable;
 
 public class Factor extends ASTNode {
-    public static ASTNode parse(TokenReader tr, CompilerState cs) throws SyntaxError {
+    public static ASTNode parse(CompilerState cs, SymbolTable st) throws SyntaxError {
+        TokenReader tr = cs.getTr();
         if (PreunOp.isOp(tr.peek())) {
             Operator op = new PreunOp(tr.read());
-            op.setRhs(Factor.parse(tr, cs));
+            op.setRhs(Factor.parse(cs, st));
             return op;
         }
-        return PostfixExpr.parse(tr, cs);
+        return PostfixExpr.parse(cs, st);
     }
 }

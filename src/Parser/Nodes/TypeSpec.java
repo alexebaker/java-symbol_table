@@ -3,6 +3,7 @@ package Parser.Nodes;
 import Errors.SyntaxError;
 import Tokenizer.TokenReader;
 import Compiler.CompilerState;
+import Compiler.SymbolTable;
 
 import java.util.Vector;
 
@@ -41,12 +42,13 @@ public class TypeSpec extends ASTNode {
         return str.toString();
     }
 
-    public static ASTNode parse(TokenReader tr, CompilerState cs) throws SyntaxError {
+    public static ASTNode parse(CompilerState cs, SymbolTable st) throws SyntaxError {
+        TokenReader tr = cs.getTr();
         TypeSpec typeSpec = new TypeSpec();
-        typeSpec.setTypeName(PrimType.parse(tr, cs));
+        typeSpec.setTypeName(PrimType.parse(cs, st));
 
         while (tr.peek().getValue().equals("[")) {
-            typeSpec.addArraySpec(ArraySpec.parse(tr, cs));
+            typeSpec.addArraySpec(ArraySpec.parse(cs, st));
         }
         return typeSpec;
     }

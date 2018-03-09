@@ -5,6 +5,7 @@ import Parser.Operators.Operator;
 import Parser.Operators.PostunOp;
 import Tokenizer.TokenReader;
 import Compiler.CompilerState;
+import Compiler.SymbolTable;
 
 public class PostfixExpr extends ASTNode {
     private ASTNode primaryExpr;
@@ -48,21 +49,22 @@ public class PostfixExpr extends ASTNode {
         return str.toString();
     }
 
-    public static ASTNode parse(TokenReader tr, CompilerState cs) throws SyntaxError {
+    public static ASTNode parse(CompilerState cs, SymbolTable st) throws SyntaxError {
+        TokenReader tr = cs.getTr();
         ASTNode node = null;
         if (PrimaryExpr.beginsPrimaryExpr(tr.peek())) {
-            node = PrimaryExpr.parse(tr, cs);
+            node = PrimaryExpr.parse(cs, st);
             while (PostunOp.isOp(tr.peek()) || tr.peek().getValue().equals("[")) {
                 if (PostunOp.isOp(tr.peek())) {
                     Operator temp = new PostunOp(tr.read());
                     temp.setLhs(node);
-                    temp.setRhs(PostfixExpr.parse(tr, cs));
+                    temp.setRhs(PostfixExpr.parse(cs, st));
                     node = temp;
                 } else {
                     PostfixExpr temp = new PostfixExpr();
                     temp.setPrimaryExpr(node);
-                    temp.setArraySpec(ArraySpec.parse(tr, cs));
-                    temp.setPostfixExpr(PostfixExpr.parse(tr, cs));
+                    temp.setArraySpec(ArraySpec.parse(cs, st));
+                    temp.setPostfixExpr(PostfixExpr.parse(cs, st));
                     node = temp;
                 }
             }
