@@ -4,6 +4,7 @@ import Errors.SyntaxError;
 import Tokenizer.TokenReader;
 import Tokenizer.Tokens.NumberToken;
 import Tokenizer.Tokens.Token;
+import Compiler.CompilerState;
 
 public class Number extends ASTNode {
     private Token token;
@@ -12,16 +13,11 @@ public class Number extends ASTNode {
         this.token = token;
     }
 
-    public String getASTR() {
+    public String getASTR(int indentDepth) {
         return token.getValue();
     }
 
-    @Override
-    public String toString() {
-        return token.toString();
-    }
-
-    public static ASTNode parse(TokenReader tr) throws SyntaxError {
+    public static ASTNode parse(TokenReader tr, CompilerState cs) throws SyntaxError {
         if (NumberToken.isToken(tr.peek())) {
             return new Number(tr.read());
         }

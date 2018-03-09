@@ -3,6 +3,7 @@ package Parser.Nodes;
 import Compiler.CompilerState;
 import Errors.SyntaxError;
 import Tokenizer.TokenReader;
+import Compiler.SymbolTable;
 
 import java.util.Vector;
 
@@ -10,11 +11,13 @@ import java.util.Vector;
 public class Block extends ASTNode {
     private Vector<ASTNode> defs;
     private Vector<ASTNode> stmts;
+    private SymbolTable symbolTable;
 
     public Block() {
         super();
         defs = new Vector<>();
         stmts = new Vector<>();
+        symbolTable = new SymbolTable();
     }
 
     public void addDef(ASTNode def) {
@@ -34,10 +37,18 @@ public class Block extends ASTNode {
     }
 
     @Override
-    public String getASTR() {
+    public String getVSR() {
         StringBuilder str = new StringBuilder("");
-        for (ASTNode stmt : getStmts()) {
-            if (stmt != null) str.append(stmt.getASTR());
+        str.append(symbolTable);
+        str.append("\n");
+        return str.toString();
+    }
+
+    @Override
+    public String getASTR(int indentDepth) {
+        StringBuilder str = new StringBuilder("");
+        for (ASTNode stmt : stmts) {
+            if (stmt != null) str.append(stmt.getASTR(indentDepth));
         }
         return str.toString();
     }
@@ -45,10 +56,10 @@ public class Block extends ASTNode {
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder("");
-        for (ASTNode def : getDefs()) {
+        for (ASTNode def : defs) {
             if (def != null) str.append(def);
         }
-        for (ASTNode stmt : getStmts()) {
+        for (ASTNode stmt : stmts) {
             if (stmt != null) str.append(stmt);
         }
         return str.toString();

@@ -13,13 +13,8 @@ public class PrimType extends ASTNode {
     }
 
     @Override
-    public String getASTR() {
+    public String getASTR(int indentDepth) {
         return token.getValue();
-    }
-
-    @Override
-    public String toString() {
-        return token.toString();
     }
 
     public static ASTNode parse(TokenReader tr, CompilerState cs) throws SyntaxError {

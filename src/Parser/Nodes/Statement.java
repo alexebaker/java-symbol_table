@@ -2,9 +2,8 @@ package Parser.Nodes;
 
 import Compiler.CompilerState;
 import Errors.SyntaxError;
+import Parser.Operators.PreunOp;
 import Tokenizer.TokenReader;
-import Tokenizer.Tokens.IdentifierToken;
-import Tokenizer.Tokens.NumberToken;
 import Tokenizer.Tokens.Token;
 
 import java.util.Vector;
@@ -35,27 +34,39 @@ public class Statement extends ASTNode {
         return stmts;
     }
 
-    public String getASTR() {
+    @Override
+    public String getASTR(int indentDepth) {
         StringBuilder str = new StringBuilder("");
+        String indentStr = super.getASTR(indentDepth);
         if (expr != null) {
-            str.append(expr.getASTR());
+            str.append(indentStr);
+            str.append(expr.getASTR(indentDepth));
+            str.append(";\n");
         }
         else {
-            for (ASTNode stmt : getStmts()) {
-                str.append("{");
-                str.append(stmt.getASTR());
-                str.append("}");
+            str.append(indentStr);
+            str.append("{\n");
+            for (ASTNode stmt : stmts) {
+                str.append(stmt.getASTR(indentDepth+1));
             }
+            str.append(indentStr);
+            str.append("}\n");
         }
         return str.toString();
     }
 
     public static ASTNode parse(TokenReader tr, CompilerState cs) throws SyntaxError {
         Statement stmt = new Statement();
-        if (tr.peek().equals("{")) {
+        if (tr.peek().getValue().equals("{")) {
             tr.read();
-            stmt.addStmt(Statement.parse(tr, cs));
-            if (tr.peek().equals("}")) {
+
+            if (!tr.peek().getValue().equals("}")) {
+                while (Statement.beginsStmt(tr.peek())) {
+                    stmt.addStmt(Statement.parse(tr, cs));
+                }
+            }
+
+            if (tr.peek().getValue().equals("}")) {
                 tr.read();
             }
             else {
@@ -64,7 +75,7 @@ public class Statement extends ASTNode {
         }
         else {
             try {
-                stmt.setExpr(Expr.parse(tr));
+                stmt.setExpr(Expr.parse(tr, cs));
                 if (tr.peek().getValue().equals(";")) {
                     tr.read();
                 }
@@ -86,6 +97,6 @@ public class Statement extends ASTNode {
     }
 
     public static boolean beginsStmt(String str) {
-        return IdentifierToken.isToken(str) || NumberToken.isToken(str) || str.equals("(") || str.equals("{");
+        return PrimaryExpr.beginsPrimaryExpr(str) || str.equals("{") || PreunOp.isOp(str);
     }
 }

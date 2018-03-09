@@ -24,11 +24,19 @@ public class Program extends ASTNode {
     }
 
     @Override
-    public String getASTR() {
+    public String getVSR() {
         StringBuilder str = new StringBuilder("");
-        for (ASTNode block : getBlocks()) {
-            str.append(block.getASTR());
-            str.append("\n");
+        for (ASTNode block : blocks) {
+            str.append(block.getVSR());
+        }
+        return str.toString();
+    }
+
+    @Override
+    public String getASTR(int indentDepth) {
+        StringBuilder str = new StringBuilder("");
+        for (ASTNode block : blocks) {
+            str.append(block.getASTR(0));
         }
         return str.toString();
     }
@@ -36,7 +44,7 @@ public class Program extends ASTNode {
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder("");
-        for (ASTNode block : getBlocks()) {
+        for (ASTNode block : blocks) {
             str.append(block);
             str.append("\n");
         }

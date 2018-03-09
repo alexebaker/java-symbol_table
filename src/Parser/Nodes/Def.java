@@ -13,7 +13,6 @@ public class Def extends ASTNode {
     private Vector<ASTNode> varNames;
 
     public Def() {
-        super();
         typeSpec = null;
         varNames = new Vector<>();
     }
@@ -35,18 +34,19 @@ public class Def extends ASTNode {
     }
 
     @Override
-    public String getASTR() {
-        return getTypeSpec().getASTR();
+    public String getASTR(int indentDepth) {
+        return typeSpec.getASTR(indentDepth);
     }
 
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder("");
-        str.append(getTypeSpec());
-        str.append(getVarNames().get(0));
-        for (int idx = 1; idx < getVarNames().size(); idx++) {
+        str.append(typeSpec);
+        str.append(" ");
+        str.append(varNames.get(0));
+        for (int idx = 1; idx < varNames.size(); idx++) {
             str.append(",");
-            str.append(getVarNames().get(idx));
+            str.append(varNames.get(idx));
         }
         str.append(";");
         return str.toString();

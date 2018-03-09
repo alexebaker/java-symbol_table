@@ -32,23 +32,12 @@ public class TypeSpec extends ASTNode {
     }
 
     @Override
-    public String getASTR() {
+    public String getASTR(int indentDepth) {
         StringBuilder str = new StringBuilder("");
-        str.append(typeName.getASTR());
-        for (ASTNode arraySpec : getArraySpecs()) {
-            str.append(arraySpec.getASTR());
+        str.append(typeName.getASTR(indentDepth));
+        for (ASTNode arraySpec : arraySpecs) {
+            str.append(arraySpec.getASTR(indentDepth));
         }
-        return str.toString();
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder str = new StringBuilder("");
-        str.append(typeName);
-        for (ASTNode arraySpec : getArraySpecs()) {
-            str.append(arraySpec);
-        }
-        str.append(" ");
         return str.toString();
     }
 

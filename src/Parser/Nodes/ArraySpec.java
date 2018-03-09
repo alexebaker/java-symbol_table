@@ -16,22 +16,11 @@ public class ArraySpec extends ASTNode {
     }
 
     @Override
-    public String getASTR() {
+    public String getASTR(int indentDepth) {
         StringBuilder str = new StringBuilder("");
         str.append("[");
         if (expr != null) {
-            str.append(expr.getASTR());
-        }
-        str.append("]");
-        return str.toString();
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder str = new StringBuilder("");
-        str.append("[");
-        if (expr != null) {
-            str.append(expr);
+            str.append(expr.getASTR(indentDepth));
         }
         str.append("]");
         return str.toString();

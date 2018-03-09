@@ -30,13 +30,14 @@ public class Operator extends ASTNode {
         this.rhs = rhs;
     }
 
-    public String getASTR() {
+    @Override
+    public String getASTR(int indentDepth) {
         StringBuilder str = new StringBuilder("");
 
         str.append("(");
-        if (lhs != null) str.append(lhs.getASTR());
+        if (lhs != null) str.append(lhs.getASTR(indentDepth));
         str.append(op.getValue());
-        if (rhs != null) str.append(rhs.getASTR());
+        if (rhs != null) str.append(rhs.getASTR(indentDepth));
         str.append(")");
         return str.toString();
     }

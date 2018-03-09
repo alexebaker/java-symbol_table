@@ -52,9 +52,9 @@ public class CompilerState {
         this.ast = ast;
     }
 
-    public void printAST() {
+    public void printBOFPIF() {
         if (ast != null) {
-            io.write(ast.getASTR());
+            io.write(ast.getBOFPIF());
         }
     }
 
