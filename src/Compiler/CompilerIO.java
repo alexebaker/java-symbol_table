@@ -132,8 +132,8 @@ public class CompilerIO {
      */
     public void write(String str) {
         try {
-            this.out.write(str);
-            this.out.newLine();
+            this.out.write(str.trim());
+            //this.out.newLine();
             this.out.flush();
         }
         catch (IOException ex) {
